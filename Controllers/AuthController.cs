@@ -29,6 +29,7 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Register([FromBody]UserForRegisterDto userForRegisterDto)
         {
 
+            if (!string.IsNullOrEmpty(userForRegisterDto.Username))
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
             if (await _repo.UserExists(userForRegisterDto.Username))
@@ -51,6 +52,8 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]UserForLoginDto userForLoginDto)
         {
+            
+                throw new Exception("Exploded");
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.password);
             if (userFromRepo == null)
                 return Unauthorized();
@@ -73,7 +76,10 @@ namespace DatingApp.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             return Ok(new{tokenString});
+
+            }
+   
+            
         }
     }
 
-}
